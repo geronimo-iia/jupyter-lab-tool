@@ -1,0 +1,55 @@
+[tool.poetry]
+name = "jupyter_lab_tool"
+version = "0.0.1"
+description = "Jupyter Lab local installation"
+license = "MIT"
+authors = ["Jerome Guibert <jguibert@gmail.com>"]
+readme = "README.md"
+homepage = "https://pypi.org/project/jupyter_lab_tool"
+documentation = "https://geronimo-iia.github.io/jupyter-lab-tool/"
+repository = "https://github.com/geronimo-iia/jupyter-lab-tool"
+keywords = []
+classifiers = [
+    # update this list to match your application: https://pypi.org/pypi?%3Aaction=list_classifiers
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+package-mode = false
+
+
+
+[tool.poetry.dependencies]
+python = ">=3.9,<3.12"
+jupyterlab = "^4.1.2"
+
+
+[tool.poe.tasks._jupyter_notebook]
+script = "os:makedirs('notebook', exist_ok=True)"
+
+[tool.poe.tasks.jupyter]
+help ="Laucnh jupyter lab"
+cmd = "poetry run jupyter lab --notebook-dir=notebook/ "
+deps = ["_jupyter_notebook"]
+
+
+[tool.poe.tasks.clean]
+help = "Remove all generated and temporary files"
+shell  = """
+rm -rf *.spec dist build .eggs *.egg-info .install .cache .coverage htmlcov .mypy_cache .pytest_cache site .ruff_cache 
+"""
+
+[tool.poe.tasks.requirements]
+help = "Generate requirements.txt"
+cmd = "poetry export --without-hashes -f requirements.txt "
+capture_stdout = "requirements.txt"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
