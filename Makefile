@@ -32,25 +32,3 @@ configure:
 	@poetry self add poetry-plugin-export
 	@poetry self add 'poethepoet[poetry_plugin]'
 	
-
-# git util #####################################################################
-
-.PHONY: next-patch-version
-next-patch-version:  ## Increment patch version
-	$(MAKE) configure
-	git checkout main
-	git pull
-	poetry version patch
-	$(MAKE) install
-	git add .
-	git commit -m "Next version"
-	git push origin main
-
-
-.PHONY: tag
-tag:  ## Tags current repository
-	git diff --name-only --exit-code
-	@PROJECT_RELEASE=$$(poetry version | awk 'END {print $$NF}') ; \
-		git tag "v$$PROJECT_RELEASE" ; \
-		git push origin "v$$PROJECT_RELEASE"
-
